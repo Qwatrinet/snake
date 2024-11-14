@@ -1,0 +1,224 @@
+* {
+    box-sizing: border-box;
+}
+
+:root {
+    --clr-bg-body: aquamarine;
+    --clr-bg-grille: aqua;
+    --clr-bg-serpent: limegreen;
+    --clr-bord-grille: black;
+    --clr-bg-btn-pause: orangered;
+    --clr-text-btn: white;
+    --clr-btn-commencer: indigo;
+    --clr-bg-pomme: deepskyblue;
+    --clr-bg-btn-retour: red;
+    --clr-bg-obstacle: brown;
+}
+
+body {
+    text-align: center;
+    background-color: var(--clr-bg-body);
+
+}
+
+header {
+    font-size: xx-large;
+}
+
+h1 {
+    margin-bottom: 1rem;
+}
+
+fieldset {
+    background-color: var(--clr-bg-pomme);
+    padding: 2rem
+}
+
+fieldset p {
+    display: inline
+}
+
+main>div {
+    margin: 2rem 35%;
+    display: grid;
+    gap: 0;
+
+    div>div {
+        background-color: var(--clr-bg-grille);
+        border: 1px solid black;
+    }
+}
+
+.pomme {
+    /* --_skin-pomme:url("./img/laTruite.webp"); */
+    background-color: var(--clr-bg-pomme);
+    background-image: var(--_skin-pomme);
+    background-size: contain;
+    transform: rotate(0);
+}
+
+.serpent {
+    background-color: var(--clr-bg-serpent);
+}
+
+.serpent.bas {
+    transform: rotate(270deg)
+}
+
+.serpent.haut {
+    transform: rotate(90deg)
+}
+
+
+.serpent.droite {
+    transform: rotate(180deg)
+}
+
+.serpent.gauche {
+    transform: rotate(0deg)
+}
+
+.tete {
+    /* --_serpent-img: url('./img/Anguille.png'); */
+    background-color: var(--clr-bg-serpent);
+    background-image: var(--_skin-serpent);
+    background-size: contain;
+
+}
+
+button {
+    font-size: xx-large;
+    padding: 1rem;
+}
+
+#pause {
+    background-color: var(--clr-bg-btn-pause);
+    color: var(--clr-text-btn);
+    border: none;
+    margin-right: 1rem;
+}
+
+#commencer {
+    background-color: var(--clr-btn-commencer);
+    color: var(--clr-text-btn);
+    border: none;
+    padding: 1rem;
+    margin-top: 0.5rem;
+}
+
+#recommencer {
+    background-color: var(--clr-btn-commencer);
+    color: var(--clr-text-btn);
+    border: none;
+}
+
+
+#score,
+#deplacement,
+#parametres {
+    font-size: xx-large;
+    font-weight: bold;
+}
+
+#deplacement {
+    margin-bottom: 1rem;
+}
+
+p {
+    margin: 0.5rem
+}
+
+header div {
+    margin-top: 1rem
+}
+
+label,
+span {
+    margin-right: 0.5rem;
+}
+
+.obstacle {
+    /* --_skin-obstacle:url(./img/mine.png); */
+    background-image: var(--_skin-obstacle);
+    background-size: contain;
+}
+
+#pauseTimer {
+    position: absolute;
+    margin-left: 10rem;
+    margin-top: -3rem;
+}
+
+fieldset input {
+    width: 1.5rem;
+    height: 1.5rem;
+}
+
+#retour {
+    margin-right: 2rem;
+    background-color: var(--clr-bg-btn-retour);
+    border: none;
+}
+
+#gameOver {
+    font-size: xx-large;
+}
+
+#psykokwak {
+    font-weight: bolder;
+}
+
+#vestiaire {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+
+    label {
+        display: block;
+    }
+
+    input[type=radio] {
+        display: none;
+    }
+
+    label:has(+input[type=radio]:checked) {
+        border: red solid .1rem;
+    }
+}
+
+#vestiaire-page {
+    position: relative;
+}
+
+#retour-vestiaire {
+    position: absolute;
+    top: 0;
+    left: 0;
+
+    #btn-retour-vestiaire {
+        background-color: var(--clr-bg-btn-retour);
+        margin-right: 1rem;
+        border:none
+    }
+
+    #btn-commencer-vestiaire {
+        background-color: var(--clr-btn-commencer);
+        margin-right: 1rem;
+        color: var(--clr-text-btn);
+        border:none
+    }
+
+}
+
+#vestiaire-btn {
+    margin-top: 1rem;
+    background-color: var(--clr-btn-commencer);
+    color: var(--clr-text-btn);
+}
+
+figure{
+    margin:0
+}
+figure img {
+    width: 5rem;
+    height: 5rem;
+}

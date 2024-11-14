@@ -1,0 +1,63 @@
+[
+    {
+        "type":"serpent",
+        "nom":"Anguille"
+    },
+    {
+        "type": "pomme",
+        "nom":"LaTruite"
+    },
+    {
+        "type":"obstacle",
+        "nom":"Caillou"
+    },
+    {
+        "type":"obstacle",
+        "nom":"Olivier"
+    },
+    {
+        "type":"obstacle",
+        "nom":"Mine"
+    },
+    
+    {
+        "type":"pomme",
+        "nom":"Pomme"
+    },
+    {
+        "type":"serpent",
+        "nom":"Serpent"
+    },
+    {
+        "type":"serpent",
+        "nom":"Lion"
+    },
+    {
+        "type":"pomme",
+        "nom": "Magicarpe"
+    },
+    {
+        "type":"pomme",
+        "nom":"Poisson-Chevre"
+    },
+    {
+        "type":"pomme",
+        "nom":"Crepe"
+    },
+    {
+        "type":"obstacle",
+        "nom":"Paperasse"
+    },
+    {
+        "type":"serpent",
+        "nom":"Aspirateur"
+    },
+    {
+        "type":"serpent",
+        "nom":"Ronflex"
+    },
+    {
+        "type":"obstacle",
+        "nom":"Plot"
+    }
+]

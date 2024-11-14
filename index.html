@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chasse aux Truites</title>
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <script type="module" src="./script/main.js"></script>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+    <header>
+        <h1>La Chasse aux Truites</h1>
+        <article v-if="!partie && !vestiaire">
+            <p>Dirigez l'anguille avec les flèches du clavier pour lui faire manger des truites et la faire grossir.</p>
+            <p>Si l'anguille touche sa propre queue c'est perdu!</p>
+            <button id="commencer" @click="demarrerPartie">Commencer</button>
+            <p id="parametres">Paramètres</p>
+            <fieldset>
+                <div>
+                    <p>Taille de la grille :</p>
+                    <input type="radio" id="petite-grille" name="petite-grille" value="5" v-model="taille">
+                    <label for="petite-grille">Petite</label>
+                    <input type="radio" id="moyenne-grille" name="moyenne-grille" value="8" v-model="taille">
+                    <label for="moyenne-grille">Moyenne</label>
+                    <input type="radio" id="grande-grille" name="grande-grille" value="12" v-model="taille">
+                    <label for="grande-grille">Grande</label>
+                </div>
+                <!-- <div>
+                    <p>Taille de l'anguille :</p>
+                    <input type="radio" id="taille-petite" name="taille-petite" value="1" v-model="nbSegments">
+                    <label for="taille-petite">Petite</label>
+                    <input type="radio" id="taille-moyenne" name="taille-moyenne" value="3" v-model="nbSegments">
+                    <label for="taille-moyenne">Moyenne</label>
+                    <input type="radio" id="taille-grande" name="taille-grande" value="6" v-model="nbSegments">
+                    <label for="taille-grande">Grande</label>
+                </div> -->
+                <div>
+                    <p>Vitesse de l'anguille :</p>
+                    <input type="radio" id="vitesse-faible" name="vitesse-faible" value="600" v-model="vitesse">
+                    <label for="vitesse-faible">Faible</label>
+                    <input type="radio" name="vitesse-moyenne" id="vitesse-moyenne" value="400" v-model="vitesse">
+                    <label for="vitesse-moyenne">Moyenne</label>
+                    <input type="radio" name="vitesse-rapide" id="vitesse-rapide" value="200" v-model="vitesse">
+                    <label for="vitesse-rapide">Rapide</label>
+                </div>
+                <div>
+                    <p>Nombre d'obstacles :</p>
+                    <input type="radio" id="zero-obstacle" name="zero-obstacle" value="Aucun" v-model="qteObstacles">
+                    <label for="zero-obstacle">Aucun</label>
+                    <input type="radio" name="qqs-obstacles" id="qqs-obstacles" value="Un peu" v-model="qteObstacles">
+                    <label for="qqs-obstacles">Quelques-uns</label>
+                    <input type="radio" name="nombreux-obstacles" id="nombreux-obstacles" value="Beaucoup"
+                        v-model="qteObstacles">
+                    <label for="nombreux-obstacles">Beaucoup</label>
+
+                </div>
+            </fieldset>
+            <button @click="ouvrirVestiaire" id="vestiaire-btn">Vestiaire</button>
+        </article>
+        <div id="vestiaire-page" v-else-if="!partie && vestiaire">
+            <h1>Bienvenue au vestiaire</h1>
+            <div id="retour-vestiaire">
+                <button @click="()=>vestiaire=false" id="btn-retour-vestiaire">Retour</button>
+                <button @click="demarrerPartie" id="btn-commencer-vestiaire">Commencer</butto>
+            </div>
+            <section id="vestiaire">
+                <article>
+                    <h2>Serpent</h2>
+                    <div v-for="skin in listerSkin()[0]">
+                        <label :for="skin">
+                            <figure>
+                                <img :src="`./img/${skin}.png`" alt="">
+                                <figcaption>{{ skin }}</figcaption>
+                            </figure>
+                        </label>
+                        <input type="radio" :name="skin" :id="skin" :value="skin" v-model="skinSerpent">
+                    </div>
+                </article>
+                <article>
+                    <h2>Pomme</h2>
+                    <div v-for="skin in listerSkin()[1]">
+                        <label :for="skin">
+                            <figure>
+                                <img :src="`./img/${skin}.png`" alt="">
+                                <figcaption>{{ skin }}</figcaption>
+                            </figure>
+                        </label>
+                        <input type="radio" :name="skin" :id="skin" :value="skin" v-model="skinPomme">
+                    </div>
+                </article>
+                <article>
+                    <h2>Obstacle</h2>
+                    <div v-for="skin in listerSkin()[2]">
+                        <label :for="skin">
+                            <figure>
+                                <img :src="`./img/${skin}.png`" alt="">
+                                <figcaption>{{ skin }}</figcaption>
+                            </figure>
+                        </label>
+                        <input type="radio" :name="skin" :id="skin" :value="skin" v-model="skinObstacle">
+                    </div>
+                </article>
+            </section>
+        </div>
+
+        <div v-else>
+            <p id="score">Score : {{ score }}</p>
+            <!-- <p>{{partie}}</p> -->
+            <p id="deplacement">Déplacements: {{nbCoups}}</p>
+            <p id="pauseTimer" v-if="partie.pause">Départ dans {{timerPause}}</p>
+            <button id="retour" @click="retour">Retour</button>
+            <button id="pause" @click="pause">Pause</button>
+            <button id="recommencer" @click="demarrerPartie">Recommencer</button>
+        </div>
+    </header>
+    <main>
+        <div v-if="partie && !partie.estPerdue" :style="grilleStyle" id="conteneur">
+            <div v-for="y of +taille">
+                <div :style="cellStyle" v-for="x of +taille"
+                    :class="{ serpent: isSerpent(x, y), pomme: isPomme(x, y),tete: isTete(x,y),droite:isDroite(),gauche:isGauche(),haut:isHaut(),bas:isBas(),obstacle:isObstacle(x,y) }">
+                </div>
+            </div>
+        </div>
+        <div v-if="partie && partie.estPerdue" id="gameOver">
+            <h2>C'est Perdu!</h2>
+            <p>vitesse : 1 case/{{vitesse}} ms</p>
+            <p>taille de la grille : {{taille}} cases</p>
+            <p>obstacles : {{qteObstacles}}</p>
+        </div>
+        <div v-if="partie && partie.estPerdue" id="psykokwak">
+            <pre>
+    ⠀⠀⠀⠀⠀⠀⠀⠀⢠⣆⢀⣶⡶
+⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢈⣿⢸⠟⣠⣶⡷
+⠀⠀⠀⠀⠀⠀⢀⣀⠀⢀⣠⠴⠴⠶⠚⠿⠿⠾⠭⣤⣀
+⠀⠀⠀⠀⢀⠴⢋⡽⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠙⠢⣀
+⠀⠀⢀⡔⠁⡰⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⠚⠛⣖
+⠀⢀⡏⠀⡼⢡⠚⡛⠒⣄⠀⠀⠀⠀⣠⠖⠛⠛⠲⡄⠐⢯⠁⠀⠀⠹⡧
+⠀⣸⠀⠀⡇⠘⠦⣭⡤⢟⡤⠤⣀⠀⠣⣀⡉⢁⣀⠟⠀⠀⢷⠀⠀⠀⠙⣗
+⠁⢻⠀⠀⢷⢀⡔⠉⢻⡅⣀⣤⡈⠙⠒⠺⠯⡍⠁⠀⠀⠀⢸⡆⠀⠀⠀⠘⡶⠄
+⠀⣈⣧⠴⠚⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣰⠃⠀⠀⠀⠀⣸⡇⠀⠀⠀⠀⠸⣔
+⣾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⣧⣤⡤⠴⠖⠋⢹⠃⠀⠀⠀⠀⠀⣷
+⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠐⣻⠁⠀⠀⠀⠀⠀⣿⠀⠀⠀⠀⠀⠀⣼
+⠙⠑⣤⣀⠀⠀⠀⠀⠀⢀⠀⠀⢄⣐⠴⠋⠀⠀⠀⠀⠀⠀⠘⢆⠀⠀⠀⠀⣰⠟
+⠀⠀⠀⣑⡟⠛⠛⠛⠛⠛⠛⠉⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢴⡾⠋
+⠀⠀⠀⡾⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡇
+⠀⠀⣰⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡇
+⠀⠀⠸⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢰⠃⠀⠃
+            </pre>
+        </div>
+    </main>
+</body>
+
+</html>
